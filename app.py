@@ -43,7 +43,7 @@ def add_new_record():
             with sqlite3.connect('database.db') as con:
                 cur = con.cursor()
                 cur.execute(
-                    "INSERT INTO products (name, amount, gender, type, sizes, price, image) VALUES (?, ?, ?, ?)",
+                    "INSERT INTO products (name, amount, gender, type, sizes, price, image) VALUES (?, ?, ?, ?, ?, ?, ?)",
                     (name, amount, gender, type, sizes, price, image))
                 con.commit()
                 msg = name + " was successfully added to the database."
@@ -69,7 +69,7 @@ def show_records():
         print("There was an error fetching results from the database: " + str(e))
     finally:
         con.close()
-        return render_template('records.html', records=records)
+        return jsonify(records)
 
 
 @app.route('/delete-student/<int:student_id>/', methods=["GET"])
