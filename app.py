@@ -72,7 +72,7 @@ def show_records():
         return jsonify(records)
 
 
-@app.route('/delete-student/<int:student_id>/', methods=["GET"])
+"""@app.route('/delete-student/<int:student_id>/', methods=["GET"])
 def delete_student(student_id):
     msg = None
     try:
@@ -86,4 +86,4 @@ def delete_student(student_id):
         msg = "Error occurred when deleting a student in the database: " + str(e)
     finally:
         con.close()
-        return render_template('delete-success.html', msg=msg)
+        return render_template('delete-success.html', msg=msg)"""
