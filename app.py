@@ -1,6 +1,13 @@
 import sqlite3
 from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
 
+
+def dict_factory(cursor,row):
+     d = {}
+     for idx, col in enumerate(cursor.description):
+         d[col[0]] = row[idx]
+     return d
 
 def init_sqlite_db():
 
@@ -16,8 +23,9 @@ init_sqlite_db()
 
 
 app = Flask(__name__)
+CORS(app)
 
-@app.route('/')
+
 @app.route('/registration-form/')
 def enter_new_student():
     return render_template('registration-form.html')
