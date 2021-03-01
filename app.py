@@ -7,7 +7,7 @@ def init_sqlite_db():
     conn = sqlite3.connect('database.db')
     print("Opened database successfully")
 
-    conn.execute('CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, amount TEXT, sizes TEXT, price TEXT)')
+    conn.execute('CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, amount TEXT, gender TEXT, type TEXT, sizes TEXT, price TEXT, image TEXT)')
     print("Table created successfully")
     conn.close()
 
@@ -31,12 +31,15 @@ def add_new_record():
             post_data = request.get_json()
             name = post_data['name']
             amount = post_data['amount']
+            gender = post_data['gender']
+            type = post_data['type']
             sizes = post_data['sizes']
             price = post_data['price']
+            image = post_data['image']
 
             with sqlite3.connect('database.db') as con:
                 cur = con.cursor()
-                cur.execute("INSERT INTO products (name, address, city, pin_code) VALUES (?, ?, ?, ?)", (name, amount, sizes, price))
+                cur.execute("INSERT INTO products (name, amount, gender, type, sizes, price, image) VALUES (?, ?, ?, ?)", (name, amount, gender, type, sizes, price, image))
                 con.commit()
                 msg = name + " was successfully added to the database."
         except Exception as e:
@@ -54,7 +57,7 @@ def show_records():
     try:
         with sqlite3.connect('database.db') as con:
             cur = con.cursor()
-            cur.execute("SELECT * FROM student")
+            cur.execute("SELECT * FROM products")
             records = cur.fetchall()
     except Exception as e:
         con.rollback()
