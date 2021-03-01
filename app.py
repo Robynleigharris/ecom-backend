@@ -3,32 +3,27 @@ from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 
 
-def dict_factory(cursor,row):
-     d = {}
-     for idx, col in enumerate(cursor.description):
-         d[col[0]] = row[idx]
-     return d
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
 
 def init_sqlite_db():
-
     conn = sqlite3.connect('database.db')
     print("Opened database successfully")
 
-    conn.execute('CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, amount TEXT, gender TEXT, type TEXT, sizes TEXT, price TEXT, image TEXT)')
+    conn.execute(
+        'CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, amount TEXT, gender TEXT, type TEXT, sizes TEXT, price TEXT, image TEXT)')
     print("Table created successfully")
     conn.close()
 
 
 init_sqlite_db()
 
-
 app = Flask(__name__)
 CORS(app)
-
-
-@app.route('/registration-form/')
-def enter_new_student():
-    return render_template('registration-form.html')
 
 
 @app.route('/add-new-record/', methods=['POST'])
@@ -47,7 +42,9 @@ def add_new_record():
 
             with sqlite3.connect('database.db') as con:
                 cur = con.cursor()
-                cur.execute("INSERT INTO products (name, amount, gender, type, sizes, price, image) VALUES (?, ?, ?, ?)", (name, amount, gender, type, sizes, price, image))
+                cur.execute(
+                    "INSERT INTO products (name, amount, gender, type, sizes, price, image) VALUES (?, ?, ?, ?)",
+                    (name, amount, gender, type, sizes, price, image))
                 con.commit()
                 msg = name + " was successfully added to the database."
         except Exception as e:
@@ -77,7 +74,6 @@ def show_records():
 
 @app.route('/delete-student/<int:student_id>/', methods=["GET"])
 def delete_student(student_id):
-
     msg = None
     try:
         with sqlite3.connect('database.db') as con:
