@@ -28,6 +28,7 @@ init_sqlite_db()
 app = Flask(__name__)
 CORS(app)
 
+
 @app.route('/creating-an-account/', methods=['POST'])
 def add_new_user():
     msg = None
@@ -48,7 +49,6 @@ def add_new_user():
     finally:
         con.close()
         return jsonify(msg)
-
 
 
 @app.route('/logging-into-account/', methods=['GET'])
@@ -75,6 +75,7 @@ def log_accounts():
             con.close()
             return jsonify(records)
 
+
 @app.route('/show-user/', methods=['GET'])
 def showing_users():
     records = []
@@ -90,11 +91,6 @@ def showing_users():
     finally:
         con.close()
         return jsonify(records)
-
-
-
-
-
 
 
 @app.route('/add-new-record/', methods=['POST'])
@@ -133,9 +129,42 @@ def show_records():
     records = []
     try:
         with sqlite3.connect('database.db') as con:
-            con.row_factory=dict_factory
+            con.row_factory = dict_factory
             cur = con.cursor()
             cur.execute("SELECT * FROM items")
+            records = cur.fetchall()
+    except Exception as e:
+        con.rollback()
+        print("There was an error fetching results from the database: " + str(e))
+    finally:
+        con.close()
+        return jsonify(records)
+
+
+@app.route('/show-men/', methods=["GET"])
+def show_men():
+    records = []
+    try:
+        with sqlite3.connect('database.db') as con:
+            con.row_factory = dict_factory
+            cur = con.cursor()
+            cur.execute("SELECT * FROM items WHERE gender LIKE 'men%'")
+            records = cur.fetchall()
+    except Exception as e:
+        con.rollback()
+        print("There was an error fetching results from the database: " + str(e))
+    finally:
+        con.close()
+        return jsonify(records)
+
+@app.route('/show-women/', methods=["GET"])
+def show_women():
+    records = []
+    try:
+        with sqlite3.connect('database.db') as con:
+            con.row_factory = dict_factory
+            cur = con.cursor()
+            cur.execute("SELECT * FROM items WHERE gender LIKE 'women%'")
             records = cur.fetchall()
     except Exception as e:
         con.rollback()
