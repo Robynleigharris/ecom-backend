@@ -157,6 +157,7 @@ def show_men():
         con.close()
         return jsonify(records)
 
+
 @app.route('/show-women/', methods=["GET"])
 def show_women():
     records = []
@@ -172,6 +173,23 @@ def show_women():
     finally:
         con.close()
         return jsonify(records)
+
+
+"""@app.route('/show-women-tops/', methods=["GET"])
+def show_women_top():
+    records = []
+    try:
+        with sqlite3.connect('database.db') as con:
+            con.row_factory = dict_factory
+            cur = con.cursor()
+            cur.execute("SELECT gender, type, price, image FROM items WHERE type = 'tops' AND gender = 'women' ")
+            records = cur.fetchall()
+    except Exception as e:
+        con.rollback()
+        print("There was an error fetching results from the database: " + str(e))
+    finally:
+        con.close()
+        return jsonify(records)"""
 
 
 """@app.route('/delete-record/<int:item_id>/', methods=["GET"])
